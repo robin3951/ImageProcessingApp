@@ -3,6 +3,8 @@ project(ImageProcessingApp LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static")
+
 
 include(FetchContent)
 
@@ -14,15 +16,29 @@ FetchContent_Declare(
 
 # Für Windows: verhindert CRT-Warnungen
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
 FetchContent_MakeAvailable(googletest)
 
-enable_testing()
+FetchContent_Declare(
+        cli11
+        GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+        GIT_TAG v2.4.2
+)
+FetchContent_MakeAvailable(cli11)
+
+
 
 add_library(image_processing
-        src/main.cpp
+        src/image_processing.cpp
+)
+target_include_directories(image_processing PUBLIC src)
+
+add_executable(cli_app src/main.cpp)
+target_link_libraries(cli_app
+        image_processing
+        CLI11::CLI11
 )
 
+enable_testing()
 add_executable(tests_image_processing
         tests/example_test.cpp
 )
