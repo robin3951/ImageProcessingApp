@@ -32,8 +32,8 @@ add_library(image_processing
 )
 target_include_directories(image_processing PUBLIC src)
 
-add_executable(cli_app src/main.cpp)
-target_link_libraries(cli_app
+add_executable(cv-cli src/main.cpp)
+target_link_libraries(cv-cli
         image_processing
         CLI11::CLI11
 )
